@@ -17,6 +17,7 @@ for i in nc.variables:
     
     
 tas = nc.variables['tas'][:]
+
 latitude_longitude = nc.variables['latitude_longitude'][:]
 ensemble_member = nc.variables['ensemble_member'][:]
 time = nc.variables['time'][:]
@@ -36,15 +37,58 @@ print(tas[0 , 0 ,0 ,0 ])
 
 
 shuffle_tas = tas[0,:]
-print(shuffle_tas[0 , : , :])
-year_1900 = shuffle_tas[0,:,:]
-print()
+shuffle_tas_np = np.array(shuffle_tas)
+latitude_np = np.array(latitude[:])
+latitude_bnds_np = np.array(latitude_bnds[:])
+longitude_np = np.array(longitude[:])
+longitude_bnds_np = np.array(longitude_bnds[:])
+month_number_np = np.array(month_number[:])
+year_np = np.array(year[:])
+date_np = np.array([year[:] , month_number[:]])
+
+date_np = np.rot90(date_np)
+date_np = np.rot90(date_np)
+date_np = np.rot90(date_np)
+
+
+land_panda = pd.DataFrame({'year':year_np[: ] , 'month':month_number_np[:]})
+#land_panda.to_csv("land_panda.csv")
 
 
 
 
 
+search_year=['1999']
 
-#print(shuffle_tas)
+search_month = ['10']
 
-#tester= pd.DataFrame({ 'tas':tas[: , 1],                'year':year[:], 'time':time[:]              })
+
+
+found_year = land_panda.loc[land_panda['year'].isin(search_year)]
+found_year_month = found_year = found_year.loc[found_year['month'].isin(search_month)]
+#print(found_year_month)
+desired_date_index = found_year_month.index[0]
+#print(desired_date_index)
+testerino  = shuffle_tas_np[desired_date_index , : , :]
+#print(shuffle_tas_np[desired_date_index , : , :])
+
+
+viewing = shuffle_tas_np[desired_date_index , : , :]
+#print(viewing)
+coor_sat = (np.where(viewing<10))
+foo = (coor_sat[0])
+foofoo = (coor_sat[1])
+invest_coor = np.stack((foo, foofoo))
+invest_coor = np.rot90(invest_coor)
+invest_coor = np.rot90(invest_coor)
+invest_coor = np.rot90(invest_coor)
+#print(shuffle_tas_np["required date" ,: ,: ])
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+
+
